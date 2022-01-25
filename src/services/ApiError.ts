@@ -1,7 +1,5 @@
-type TApiErrorCode = 200 | 429 | 404 | 500
-
 interface IApiError {
-  code: TApiErrorCode
+  code: number
   message: string
 }
 
@@ -22,19 +20,20 @@ export class ApiError {
     {
       code: 500,
       message: 'Internal Server Error'
+    },
+    {
+      code: 520,
+      message: 'Unknown Error'
     }
   ]
 
   error: IApiError | null = null
 
-  constructor (code: TApiErrorCode) {
+  constructor (code = 520) {
     this.error = this.errors.find(err => err.code === code) || null
   }
 
-  get () {
-    return this.error || {
-      code: 520,
-      message: 'Unknown Error'
-    }
+  get (): IApiError {
+    return this.error as IApiError
   }
 }
